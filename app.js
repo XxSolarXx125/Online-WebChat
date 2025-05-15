@@ -54,7 +54,7 @@ fetch('Mods.txt')
   });
 
 // Play send message sound
-const sendSound = new Audio('ping.mp3');
+const sendSound = new Audio('ping.wav');
 
 // Send message function
 function sendMessage() {
@@ -105,23 +105,14 @@ chatRef.on("child_added", (snapshot) => {
   }
 });
 
-// Escape HTML to avoid XSS
 function escapeHtml(text) {
   return text.replace(/[&<>"']/g, (m) => ({
     '&': "&amp;",
     '<': "&lt;",
-    '>':
-
-
-
-
-
-
-ChatGPT said:
-">",
-'"': """,
-"'": "'"
-})[m]);
+    '>': "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[m]);
 }
 
 // Edit message
@@ -180,9 +171,9 @@ const names = Object.values(typingUsers).filter(name => name !== username);
 if (names.length === 0) {
 typingStatus.textContent = "Nobody is typing...";
 } else if (names.length === 1) {
-typingStatus.textContent = ${names[0]} is typing...;
+typingStatus.textContent = `${names[0]} is typing...`;
 } else {
-typingStatus.textContent = ${names.join(", ")} are typing...;
+typingStatus.textContent = `${names.join(", ")} are typing...`;
 }
 }
 });
