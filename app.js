@@ -56,6 +56,13 @@ fetch('Mods.txt')
 // Play send message sound
 const sendSound = new Audio('ping.wav');
 
+input.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
 // Send message function
 function sendMessage() {
   const message = input.value.trim();
