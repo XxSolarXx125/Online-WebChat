@@ -5,7 +5,8 @@ const firebaseConfig = {
   projectId: "solar-webchat",
   storageBucket: "solar-webchat.firebasestorage.app",
   messagingSenderId: "554037375442",
-  appId: "1:554037375442:web:3caa7fa4e72734efc8580b"
+  appId: "1:554037375442:web:3caa7fa4e72734efc8580b",
+  measurementId: "G-9Q02HWXP58"
 };
 
 firebase.initializeApp(firebaseConfig);
