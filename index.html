@@ -3,25 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Online Chat</title>
+  <title>Galaxy Chat</title>
   <style>
     body {
       margin: 0;
-      padding: 0;
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background: #f0f2f5;
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: #ffffff;
       display: flex;
       flex-direction: column;
       height: 100vh;
+      overflow: hidden;
     }
 
     header {
-      background-color: #007bff;
-      color: white;
-      padding: 1rem;
+      background: rgba(0, 0, 0, 0.6);
       text-align: center;
+      padding: 1rem;
       font-size: 1.5rem;
       font-weight: bold;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 10px #6a00ff;
     }
 
     .chat-container {
@@ -29,13 +31,13 @@
       display: flex;
       flex-direction: column;
       max-width: 600px;
-      margin: 0 auto;
-      border: 1px solid #ccc;
-      background: white;
+      margin: auto;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255,255,255,0.1);
       border-radius: 10px;
       overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      animation: fadeIn 0.5s ease-in-out;
+      box-shadow: 0 0 20px rgba(255,255,255,0.1);
+      animation: fadeIn 1s ease;
     }
 
     .chat-box {
@@ -52,52 +54,54 @@
       max-width: 75%;
       border-radius: 20px;
       animation: slideUp 0.3s ease-in-out;
+      word-wrap: break-word;
     }
 
     .sent {
       align-self: flex-end;
-      background-color: #dcf8c6;
+      background-color: #6a00ff;
     }
 
     .received {
       align-self: flex-start;
-      background-color: #f1f0f0;
+      background-color: #3e3a56;
     }
 
     .input-container {
       display: flex;
       padding: 1rem;
-      border-top: 1px solid #ccc;
-      background: #fafafa;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
     }
 
     .input-container input {
       flex: 1;
       padding: 0.7rem;
-      border: 1px solid #ccc;
+      border: none;
       border-radius: 20px;
       outline: none;
-      transition: 0.2s;
+      background: #1a1a2e;
+      color: #fff;
     }
 
     .input-container button {
       margin-left: 0.5rem;
       padding: 0.7rem 1rem;
       border: none;
-      background-color: #007bff;
+      background-color: #6a00ff;
       color: white;
       border-radius: 20px;
       cursor: pointer;
-      transition: 0.3s;
+      transition: background 0.3s;
     }
 
     .input-container button:hover {
-      background-color: #0056b3;
+      background-color: #4700b3;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
     }
 
     @keyframes slideUp {
@@ -107,7 +111,7 @@
   </style>
 </head>
 <body>
-  <header>Chat Room</header>
+  <header>Galaxy Chat 🌌</header>
 
   <div class="chat-container">
     <div class="chat-box" id="chatBox"></div>
@@ -117,6 +121,9 @@
     </div>
   </div>
 
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
