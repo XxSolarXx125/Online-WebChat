@@ -19,20 +19,23 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     header {
-      background: rgba(10, 10, 20, 0.8);
+      background: rgba(10, 10, 20, 0.9);
       text-align: center;
       padding: 1rem 0;
-      font-size: 1.75rem;
-      font-weight: 700;
-      letter-spacing: 2px;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 0 20px #6a00ff;
+      font-size: 1.9rem;
+      font-weight: 900;
+      letter-spacing: 3px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 0 30px #7d00ffcc;
       user-select: none;
       z-index: 10;
       flex-shrink: 0;
+      text-shadow: 0 0 10px #a05effaa;
     }
 
     .chat-container {
@@ -42,131 +45,196 @@
       max-width: 900px;
       width: 100%;
       margin: 0 auto;
-      background: rgba(0, 0, 0, 0.4);
-      border-radius: 12px 12px 0 0;
-      box-shadow: 0 0 30px rgba(106, 0, 255, 0.5);
-      backdrop-filter: blur(15px);
+      background: rgba(15, 10, 40, 0.7);
+      border-radius: 14px 14px 0 0;
+      box-shadow: 0 0 50px rgba(110, 0, 255, 0.7);
+      backdrop-filter: blur(20px);
       overflow: hidden;
-      height: calc(100vh - 70px); /* header height approx 70px */
+      height: calc(100vh - 80px); /* header height approx 80px */
     }
 
     .chat-box {
       flex: 1 1 auto;
-      padding: 1rem 1.5rem;
+      padding: 1.2rem 2rem;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 0.4rem;
+      gap: 0.5rem;
       scrollbar-width: thin;
-      scrollbar-color: #6a00ff transparent;
+      scrollbar-color: #9f63ff transparent;
+      scroll-behavior: smooth;
     }
     .chat-box::-webkit-scrollbar {
-      width: 8px;
+      width: 9px;
     }
     .chat-box::-webkit-scrollbar-thumb {
-      background-color: #6a00ff;
-      border-radius: 4px;
+      background-color: #9f63ffcc;
+      border-radius: 5px;
+      box-shadow: inset 0 0 5px #6a00ffbb;
+      transition: background-color 0.3s ease;
+    }
+    .chat-box::-webkit-scrollbar-thumb:hover {
+      background-color: #c49fffcc;
     }
 
     .message {
       max-width: 70%;
-      padding: 0.7rem 1.2rem;
-      border-radius: 24px;
+      padding: 0.85rem 1.5rem;
+      border-radius: 28px;
       word-wrap: break-word;
       position: relative;
-      font-size: 1rem;
-      line-height: 1.3;
-      animation: slideUp 0.3s ease-in-out;
-      box-shadow: 0 0 8px rgba(106, 0, 255, 0.5);
+      font-size: 1.1rem;
+      line-height: 1.4;
+      animation: slideUp 0.3s ease forwards;
+      box-shadow: 0 0 12px rgba(142, 56, 255, 0.6);
       user-select: text;
+      transition: box-shadow 0.25s ease;
+      backdrop-filter: blur(8px);
+      background-clip: padding-box;
+      border: 1px solid rgba(120, 60, 255, 0.3);
     }
+    .message:hover {
+      box-shadow: 0 0 20px #b170ff, 0 0 8px #8a00ff inset;
+    }
+
     .sent {
       align-self: flex-end;
-      background: #7b3cff;
-      color: #f0e6ff;
-      border-bottom-right-radius: 4px;
+      background: linear-gradient(145deg, #9e5bff, #7b3cff);
+      color: #f3e9ff;
+      border-bottom-right-radius: 6px;
+      font-weight: 600;
+      text-shadow: 0 0 2px #8c4dffaa;
     }
     .received {
       align-self: flex-start;
-      background: #3e3a56cc;
-      color: #dcdce0;
-      border-bottom-left-radius: 4px;
+      background: rgba(62, 58, 86, 0.75);
+      color: #dddde1;
+      border-bottom-left-radius: 6px;
+      font-weight: 500;
+      text-shadow: 0 0 1px #3a3a7a;
+      border: 1px solid rgba(100, 100, 150, 0.2);
     }
 
     .meta {
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       color: #bbb;
-      margin-top: 4px;
+      margin-top: 5px;
       user-select: none;
+      font-style: italic;
+      text-align: right;
+      text-shadow: 0 0 4px #6a00ff44;
     }
 
     .input-container {
-      padding: 1rem 1.5rem;
-      background: rgba(15, 10, 40, 0.9);
+      padding: 1rem 2rem;
+      background: rgba(25, 15, 50, 0.9);
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-      border-radius: 0 0 12px 12px;
-      backdrop-filter: blur(12px);
+      gap: 1rem;
+      border-radius: 0 0 14px 14px;
+      backdrop-filter: blur(18px);
       flex-shrink: 0;
+      box-shadow: inset 0 0 12px #7f00ff99;
     }
 
     input#messageInput {
       flex-grow: 1;
-      padding: 0.8rem 1.2rem;
-      font-size: 1.1rem;
-      border-radius: 28px;
+      padding: 1rem 1.4rem;
+      font-size: 1.2rem;
+      border-radius: 32px;
       border: none;
       outline: none;
-      background: #1a1a3a;
+      background: #2d2b56;
       color: #eee;
-      transition: background-color 0.3s ease;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: inset 0 0 10px #4e3ea0aa;
+      user-select: text;
     }
     input#messageInput::placeholder {
-      color: #777;
+      color: #9b8fc3;
       font-style: italic;
+      opacity: 0.8;
     }
     input#messageInput:focus {
-      background-color: #2b2b5a;
+      background-color: #433f7a;
+      box-shadow: 0 0 14px #9b63ffdd;
+      color: #fff;
     }
 
     button {
-      padding: 0.8rem 1.6rem;
-      font-weight: 700;
-      font-size: 1.1rem;
-      border-radius: 28px;
+      padding: 1rem 2rem;
+      font-weight: 800;
+      font-size: 1.2rem;
+      border-radius: 32px;
       border: none;
-      background: #6a00ff;
+      background: linear-gradient(135deg, #7b3cff, #9e5bff);
       color: #fff;
       cursor: pointer;
       user-select: none;
-      transition: background-color 0.3s ease;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.1s ease;
+      box-shadow: 0 0 14px #9e5bffcc;
     }
     button:hover {
-      background: #4700b3;
+      background: linear-gradient(135deg, #955eff, #b07fff);
+      box-shadow: 0 0 25px #b583ff;
+      transform: scale(1.05);
+    }
+    button:active {
+      transform: scale(0.95);
+      box-shadow: 0 0 12px #7a3eff;
     }
     button:disabled {
-      background: #45007a;
+      background: #5d33a6;
       cursor: not-allowed;
+      box-shadow: none;
     }
 
     .status-bar {
-      padding: 0.5rem 1.5rem;
-      font-size: 0.85rem;
-      color: #aaa;
+      padding: 0.55rem 2rem;
+      font-size: 0.9rem;
+      color: #b3aadd;
       user-select: none;
-      background: rgba(15, 10, 40, 0.75);
-      backdrop-filter: blur(8px);
+      background: rgba(30, 20, 60, 0.7);
+      backdrop-filter: blur(10px);
+      box-shadow: inset 0 0 12px #7d00ffbb;
+      text-shadow: 0 0 6px #8e64ffaa;
+      font-weight: 600;
+      letter-spacing: 0.02em;
     }
 
     @keyframes slideUp {
       from {
         opacity: 0;
-        transform: translateY(12px);
+        transform: translateY(18px);
       }
       to {
         opacity: 1;
         transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .chat-container {
+        max-width: 100%;
+        height: calc(100vh - 60px);
+        border-radius: 0;
+      }
+
+      .message {
+        max-width: 90%;
+        font-size: 1rem;
+      }
+
+      button {
+        padding: 0.9rem 1.3rem;
+        font-size: 1.1rem;
+      }
+
+      input#messageInput {
+        font-size: 1rem;
+        padding: 0.8rem 1rem;
       }
     }
   </style>
@@ -174,26 +242,13 @@
 <body>
   <header>Galaxy Chat 🌌</header>
 
-  <div class="chat-container" role="main" aria-label="Chat container">
-    <div class="chat-box" id="chatBox" aria-live="polite" aria-relevant="additions"></div>
-    <div class="status-bar" id="typingStatus" aria-live="polite">Nobody is typing...</div>
-    <div class="status-bar" id="onlineUsers" aria-live="polite">Online: 0</div>
-    <div class="input-container">
-      <input
-        type="text"
-        id="messageInput"
-        placeholder="Type a message..."
-        aria-label="Message input"
-        autocomplete="off"
-        maxlength="500"
-      />
-      <button id="sendBtn" onclick="sendMessage()" aria-label="Send message">Send</button>
-    </div>
-  </div>
-
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-  <script src="app.js"></script>
-</body>
-</html>
+  <div class="chat-container" role="main" aria-label="
+  Chat container">
+<div class="chat-box" id="chatBox" aria-live="polite" aria-relevant="additions"></div>
+<div class="status-bar" id="typingStatus" aria-live="polite">Nobody is typing...</div>
+<div class="status-bar" id="onlineUsers" aria-live="polite">Online: 0</div>
+<div class="input-container">
+<input type="text" id="messageInput" placeholder="Type a message..." aria-label="Message input" autocomplete="off" maxlength="500" />
+<button id="sendBtn" onclick="sendMessage()" aria-label="Send message" disabled>Send</button>
+</div>
+</div> <!-- Firebase SDK --> <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script> <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script> <script src="app.js"></script> <script> // Play sound on message send const sendBtn = document.getElementById("sendBtn"); const messageInput = document.getElementById("messageInput"); const pingSound = new Audio('ping.wav'); // Enable send button only if input not empty messageInput.addEventListener('input', () => { sendBtn.disabled = messageInput.value.trim() === ''; }); function playPing() { pingSound.currentTime = 0; pingSound.play().catch(() => {}); // prevent unhandled promise rejection } // Assuming your sendMessage function exists in app.js // Modify sendMessage to call playPing after sending the message // If you can't modify app.js, override here: const originalSendMessage = window.sendMessage; window.sendMessage = function () { originalSendMessage(); playPing(); messageInput.focus(); }; // Also send message on Enter key (optional, improve UX) messageInput.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey && !sendBtn.disabled) { e.preventDefault(); sendMessage(); } }); </script> </body> </html>
