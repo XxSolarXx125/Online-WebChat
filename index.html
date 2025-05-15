@@ -67,14 +67,26 @@
       background-color: #3e3a56;
     }
 
+    .meta {
+      font-size: 0.75rem;
+      color: #aaa;
+      margin-top: 2px;
+    }
+
     .input-container {
       display: flex;
+      flex-direction: column;
       padding: 1rem;
       background: rgba(0, 0, 0, 0.5);
       backdrop-filter: blur(10px);
     }
 
-    .input-container input {
+    .input-row {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .input-row input {
       flex: 1;
       padding: 0.7rem;
       border: none;
@@ -84,8 +96,7 @@
       color: #fff;
     }
 
-    .input-container button {
-      margin-left: 0.5rem;
+    .input-row button {
       padding: 0.7rem 1rem;
       border: none;
       background-color: #6a00ff;
@@ -95,8 +106,14 @@
       transition: background 0.3s;
     }
 
-    .input-container button:hover {
+    .input-row button:hover {
       background-color: #4700b3;
+    }
+
+    .status-bar {
+      font-size: 0.85rem;
+      color: #ccc;
+      padding: 0.5rem 1rem;
     }
 
     @keyframes fadeIn {
@@ -115,9 +132,13 @@
 
   <div class="chat-container">
     <div class="chat-box" id="chatBox"></div>
+    <div class="status-bar" id="typingStatus">Nobody is typing...</div>
+    <div class="status-bar" id="onlineUsers">Online: 0</div>
     <div class="input-container">
-      <input type="text" id="messageInput" placeholder="Type a message..." />
-      <button onclick="sendMessage()">Send</button>
+      <div class="input-row">
+        <input type="text" id="messageInput" placeholder="Type a message..." />
+        <button onclick="sendMessage()">Send</button>
+      </div>
     </div>
   </div>
 
