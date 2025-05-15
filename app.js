@@ -1,57 +1,137 @@
-const firebaseConfig = {
-  apiKey: "AIzaSyBs-lWw85bi3YYcfE4b8EXGqeP3XOATUCg",
-  authDomain: "solar-webchat.firebaseapp.com",
-  databaseURL: "https://solar-webchat-default-rtdb.firebaseio.com",
-  projectId: "solar-webchat",
-  storageBucket: "solar-webchat.appspot.com",
-  messagingSenderId: "554037375442",
-  appId: "1:554037375442:web:3caa7fa4e72734efc8580b"
-};
+// Utility: Escape HTML to avoid XSS (keep your existing)
+function escapeHtml(text) {
+  return text.replace(/[&<>"']/g, (m) => ({
+    '&': "&amp;",
+    '<': "&lt;",
+    '>': "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[m]);
+}
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-const chatRef = db.ref("messages");
-const typingRef = db.ref("typing");
-const onlineRef = db.ref("online");
+// Render message function for reuse and fixing mod tag and edit/delete buttons
+function renderMessage(data, msgId) {
+  const msg = document.createElement("div");
+  msg.className = "message " + (data.user === username ? "sent" : "received");
+  msg.dataset.key = msgId;
 
-const chatBox = document.getElementById("chatBox");
-const input = document.getElementById("messageInput");
-const typingStatus = document.getElementById("typingStatus");
-const onlineUsers = document.getElementById("onlineUsers");
+  // MOD prefix
+  const displayUser = isModUser(data.user) ? `[ MOD ] : ${escapeHtml(data.user)}` : escapeHtml(data.user);
 
-let username = prompt("Enter your username:");
-if (!username) username = "User" + Math.floor(Math.random() * 1000);
+  // Message innerHTML with mod buttons only if current user is a mod
+  msg.innerHTML = `
+    <div class="message-text"><strong>${displayUser}</strong>: <span class="text">${escapeHtml(data.text)}</span></div>
+    <div class="meta">${new Date(data.timestamp).toLocaleTimeString()}</div>
+    ${isMod ? `
+      <div class="edit-delete-btns">
+        <button class="edit-btn" aria-label="Edit message">Edit</button>
+        <button class="delete-btn" aria-label="Delete message">Delete</button>
+      </div>` : ''}
+  `;
 
-const userId = Date.now().toString();
-let isMod = false; // Moderator flag
+  if (isMod) {
+    // Attach event listeners for edit/delete
+    msg.querySelector(".edit-btn").onclick = () => editMessage(msgId, msg);
+    msg.querySelector(".delete-btn").onclick = () => deleteMessage(msgId, msg);
+  }
+  return msg;
+}
 
-// Add user online
-onlineRef.child(userId).set({ username });
-onlineRef.child(userId).onDisconnect().remove();
+// Simple mod user checker - add your logic here
+function isModUser(user) {
+  // For simplicity, only current user is mod, or extend with a mod list
+  // You can fetch an actual list of mods from your DB or a file if you want
+  return user === username && isMod;
+}
 
-// Moderation Checker
-fetch('Mods.txt')
-  .then(res => res.text())
-  .then(text => {
-    const lines = text.split(/\r?\n/);
-    for (const line of lines) {
-      const match = line.match(/^Username:\s*(\w+)\s*Password:\s*(.+)$/);
-      if (match) {
-        const [_, fileUsername, filePassword] = match;
-        if (fileUsername === username) {
-          const entered = prompt("Moderation Checker: Enter the password for this username:");
-          if (entered === filePassword) {
-            isMod = true;
-            alert("Access granted. Moderator privileges enabled.");
-          } else {
-            alert("Access denied. Incorrect password.");
-            username = "User" + Math.floor(Math.random() * 1000); // fallback to random user
-          }
-          break;
-        }
+// Listen for new messages
+chatRef.on("child_added", (snapshot) => {
+  const data = snapshot.val();
+  const msgId = snapshot.key;
+
+  const msg = renderMessage(data, msgId);
+  chatBox.appendChild(msg);
+  chatBox.scrollTop = chatBox.scrollHeight;
+});
+
+// Edit message
+function editMessage(msgId, msgElement) {
+  const textSpan = msgElement.querySelector(".text");
+  const oldText = textSpan.textContent;
+
+  // Replace text with input box
+  const inputEdit = document.createElement("input");
+  inputEdit.type = "text";
+  inputEdit.value = oldText;
+  inputEdit.style.width = "80%";
+  inputEdit.className = "edit-input";
+
+  msgElement.querySelector(".message-text").replaceChild(inputEdit, textSpan);
+  inputEdit.focus();
+
+  function finishEditing(newText) {
+    if (newText.trim().length === 0) {
+      alert("Message cannot be empty.");
+      inputEdit.focus();
+      return false;
+    }
+    chatRef.child(msgId).update({ text: newText.trim() });
+    return true;
+  }
+
+  inputEdit.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      if (finishEditing(inputEdit.value)) {
+        // Replace input with updated text span
+        const newSpan = document.createElement("span");
+        newSpan.className = "text";
+        newSpan.textContent = inputEdit.value.trim();
+        inputEdit.parentNode.replaceChild(newSpan, inputEdit);
       }
+    } else if (e.key === "Escape") {
+      inputEdit.parentNode.replaceChild(textSpan, inputEdit);
     }
   });
+
+  inputEdit.addEventListener("blur", () => {
+    // Cancel edit if focus lost (optional)
+    if (document.activeElement !== inputEdit) {
+      inputEdit.parentNode.replaceChild(textSpan, inputEdit);
+    }
+  });
+}
+
+// Delete message
+function deleteMessage(msgId, msgElement) {
+  if (confirm("Are you sure you want to delete this message?")) {
+    chatRef.child(msgId).remove();
+    msgElement.remove();
+  }
+}
+
+// Update messages on change (edit)
+chatRef.on("child_changed", (snapshot) => {
+  const data = snapshot.val();
+  const msgId = snapshot.key;
+
+  const msgElement = [...chatBox.children].find(c => c.dataset.key === msgId);
+  if (msgElement) {
+    // Update text span safely
+    const textSpan = msgElement.querySelector(".text");
+    if (textSpan) {
+      textSpan.textContent = data.text;
+    }
+  }
+});
+
+// Remove messages on delete
+chatRef.on("child_removed", (snapshot) => {
+  const msgId = snapshot.key;
+  const msgElement = [...chatBox.children].find(c => c.dataset.key === msgId);
+  if (msgElement) {
+    msgElement.remove();
+  }
+});
 
 // Send message function
 function sendMessage() {
