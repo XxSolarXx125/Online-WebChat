@@ -78,15 +78,15 @@ chatRef.on("child_added", (snapshot) => {
   msg.dataset.key = msgId;
 
   // Message HTML with edit/delete buttons for mods
-  msg.innerHTML = 
+  msg.innerHTML = `
     <div class="message-text"><strong>${escapeHtml(data.user)}</strong>: <span class="text">${escapeHtml(data.text)}</span></div>
     <div class="meta">${new Date(data.timestamp).toLocaleTimeString()}</div>
-    ${isMod ? 
+    ${isMod ? `
       <div class="edit-delete-btns">
         <button class="edit-btn">Edit</button>
         <button class="delete-btn">Delete</button>
-      </div> : ''}
-  ;
+      </div>` : ''}
+  `;
 
   chatBox.appendChild(msg);
   chatBox.scrollTop = chatBox.scrollHeight;
@@ -193,11 +193,11 @@ input.addEventListener("input", () => {
 typingRef.on("value", (snapshot) => {
   const data = snapshot.val() || {};
   const names = Object.values(data).map(v => v.username).filter(n => n !== username);
-  typingStatus.textContent = names.length ? ${names.join(", ")} typing... : "Nobody is typing...";
+  typingStatus.textContent = names.length ? `${names.join(", ")} typing...` : "Nobody is typing...";
 });
 
 // Online users count
 onlineRef.on("value", (snapshot) => {
   const count = snapshot.numChildren();
-  onlineUsers.textContent = Online: ${count};
+  onlineUsers.textContent = `Online: ${count}`;
 });
