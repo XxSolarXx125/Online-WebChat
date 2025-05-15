@@ -49,35 +49,22 @@
     }
 
     .message {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      margin: 0.5rem 0;
-      animation: slideUp 0.3s ease-in-out;
-    }
-
-    .message img {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
-    .message-content {
-      background-color: rgba(255, 255, 255, 0.1);
       padding: 0.5rem 1rem;
-      border-radius: 12px;
+      margin: 0.3rem 0;
       max-width: 75%;
+      border-radius: 20px;
+      animation: slideUp 0.3s ease-in-out;
       word-wrap: break-word;
     }
 
     .sent {
       align-self: flex-end;
-      flex-direction: row-reverse;
+      background-color: #6a00ff;
     }
 
-    .sent .message-content {
-      background-color: #6a00ff;
+    .received {
+      align-self: flex-start;
+      background-color: #3e3a56;
     }
 
     .input-container {
